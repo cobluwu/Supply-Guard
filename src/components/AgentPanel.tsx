@@ -51,7 +51,7 @@ export default function AgentPanel() {
     return match ? match[0] : withoutThinking;
   };
 
-  const generateWithRetry = async (ai: any, config: any, maxRetries = 3) => {
+  const generateWithRetry = async (ai: any, config: any, maxRetries = 5) => {
     let attempt = 0;
     while (attempt < maxRetries) {
       try {
@@ -61,8 +61,15 @@ export default function AgentPanel() {
         const errorStr = typeof e === 'string' ? e : (e?.message || JSON.stringify(e));
         const isRateLimit = errorStr.includes('429') || errorStr.toLowerCase().includes('quota') || errorStr.toLowerCase().includes('exhausted') || errorStr.includes('503');
         if (isRateLimit && attempt < maxRetries) {
-          console.warn(`Rate limit hit, retrying in ${attempt * 2}s...`);
-          await new Promise(resolve => setTimeout(resolve, attempt * 2000));
+          let waitTimeMs = attempt * 2000;
+          const retryMatch = errorStr.match(/retry in (\d+(?:\.\d+)?)s/i);
+          if (retryMatch && retryMatch[1]) {
+            waitTimeMs = Math.ceil(parseFloat(retryMatch[1])) * 1000 + 1000; // Add 1s buffer
+          } else {
+            waitTimeMs = 5000 * attempt; // Default fallback backoff
+          }
+          console.warn(`Rate limit hit. Retrying in ${waitTimeMs / 1000}s... (Attempt ${attempt}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, waitTimeMs));
         } else {
           throw e;
         }
@@ -104,7 +111,7 @@ ${GLOBAL_ROUTES_CONTEXT}`;
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       const response = await generateWithRetry(ai, {
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.1-flash-lite-preview',
         contents: prompt,
         config: {
           systemInstruction,
@@ -302,7 +309,7 @@ Then, you MUST output the final result in JSON matching this schema:
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       let response = await generateWithRetry(ai, {
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.1-flash-lite-preview',
         contents,
         config: {
           systemInstruction,
@@ -353,7 +360,7 @@ Then, you MUST output the final result in JSON matching this schema:
         contents.push({ role: 'user', parts: functionResponses });
         
         response = await generateWithRetry(ai, {
-          model: 'gemini-2.5-flash',
+          model: 'gemini-3.1-flash-lite-preview',
           contents,
           config: {
             systemInstruction,
@@ -420,7 +427,7 @@ DISRUPTION: ${JSON.stringify(disruption)}`;
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       const response = await generateWithRetry(ai, {
-        model: 'gemini-2.5-flash',
+        model: 'gemini-3.1-flash-lite-preview',
         contents: prompt,
         config: {
           systemInstruction,

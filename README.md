@@ -27,6 +27,17 @@ Global supply chains are inherently fragile. When a disruption strikes, human re
 - **Mapping:** React-Leaflet, Leaflet
 - **AI Core:** Google Gemini API
 
+## 🏃‍♂️ Getting Started
+
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
 ## 🔒 Security & Guardrails
 
 SupplyGuard is designed with safety first. The AI is strictly constrained by rule-based gates. It will **escalate** rather than auto-execute if:
