@@ -1,0 +1,5 @@
+{
+  "name": "SupplyGuard",
+  "description": "Autonomous supply chain rerouting agent dashboard.",
+  "requestFramePermissions": []
+}

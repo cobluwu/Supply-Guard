@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "Courier Prime", monospace;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-[#f4f1ea] text-[#1a1a1a] font-sans selection:bg-[#da312e] selection:text-[#f4f1ea];
+    background-image: 
+      radial-gradient(#d5d1c8 1px, transparent 1px),
+      radial-gradient(#d5d1c8 1px, transparent 1px);
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
+  }
+}
+
+/* Paper distress/texture effects */
+.paper-edge {
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.05), -1px -1px 2px rgba(255,255,255,0.8);
+  border: 1px solid #e0dcd2;
+}
+
+.stamp {
+  font-family: "Courier Prime", monospace;
+  color: #da312e;
+  border: 3px solid #da312e;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  transform: rotate(-5deg);
+  opacity: 0.8;
+  mix-blend-mode: multiply;
+}
+
+.ink-underline {
+  position: relative;
+}
+.ink-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #1a4c8a;
+  transform: rotate(-1deg);
+}
+
+@keyframes type-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.animate-blink {
+  animation: type-blink 1s step-end infinite;
+}
+
