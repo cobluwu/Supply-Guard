@@ -104,7 +104,7 @@ ${GLOBAL_ROUTES_CONTEXT}`;
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       const response = await generateWithRetry(ai, {
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
           systemInstruction,
@@ -302,12 +302,11 @@ Then, you MUST output the final result in JSON matching this schema:
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       let response = await generateWithRetry(ai, {
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash',
         contents,
         config: {
           systemInstruction,
           tools,
-          toolConfig: { includeServerSideToolInvocations: true },
           temperature: 0.2,
         }
       });
@@ -354,12 +353,11 @@ Then, you MUST output the final result in JSON matching this schema:
         contents.push({ role: 'user', parts: functionResponses });
         
         response = await generateWithRetry(ai, {
-          model: 'gemini-3-flash-preview',
+          model: 'gemini-2.5-flash',
           contents,
           config: {
             systemInstruction,
             tools,
-            toolConfig: { includeServerSideToolInvocations: true },
             temperature: 0.2
           }
         });
@@ -422,7 +420,7 @@ DISRUPTION: ${JSON.stringify(disruption)}`;
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       const response = await generateWithRetry(ai, {
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
           systemInstruction,
